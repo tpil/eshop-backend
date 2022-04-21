@@ -5,7 +5,7 @@ const router = express.Router();
 const mongoose = require('mongoose');
 
 router.get('/', async (req, res) => {
-    //allow query parameters for filtering categories
+    //allow query parameters to filter products from categories ids
     let filter = {};
     if (req.query.categories)
         filter = { category: req.query.categories.split('-') };

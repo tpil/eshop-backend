@@ -3,6 +3,8 @@ const app = express();
 const morgan = require("morgan");
 const mongoose = require("mongoose");
 const cors = require('cors');
+const authJwt = require('./helpers/jwt');
+const errorHandler = require('./helpers/error-handler');
 
 require("dotenv/config");
 
@@ -13,6 +15,8 @@ app.options('*', cors());
 //Midlewares
 app.use(express.json()); //parse json data
 app.use(morgan("tiny")); //log http requests
+app.use(authJwt()); //jwt token
+app.use(errorHandler); // handle jwt errors
 
 //Routers - use routers as Midleware
 const api = process.env.API_URL;
@@ -20,6 +24,7 @@ const categoriesRouter = require('./routers/categories');
 const productsRouter = require('./routers/products');
 const usersRouter = require('./routers/users');
 const ordersRouter = require('./routers/orders');
+
 app.use(api + '/categories', categoriesRouter);
 app.use(api + '/products', productsRouter);
 app.use(api + '/users', usersRouter);
