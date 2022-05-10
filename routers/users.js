@@ -120,4 +120,27 @@ router.put('/:id', async (req, res) => {
     res.send(user);
 });
 
+router.delete('/:id', (req, res) => {
+    Category.findByIdAndDelete(req.params.id).then(user => {
+        if (user)
+            return res.status(200).json({ success: true, message: "the user has been deleted!" });
+        else
+            return res.status(404).json({ success: false, message: "user not found!" });
+    }).catch((err) => {
+        //in case of any error occurs from client's side. Invalid categoryID
+        return res.status(400).json({ success: false, error: err });
+    });
+});
+
+
+//Admin Statistics
+router.get('/get/count', async (req, res) => {
+    const UserCount = await User.countDocuments();
+
+    if (!UserCount)
+        return res.status(500).json({ success: false });
+
+    res.status(200).json({ userCount: UserCount });
+});
+
 module.exports = router;
